@@ -14,7 +14,7 @@ cd donations-api
 ```
 
 for the purpose of take home project documentation is committed to the repository.
-[donations-svc-api-docs-1.0.0.html](donations-api/out/donations-svc-api-docs-1.0.0.html)
+[donations-svc-api-docs-1.0.0.html](https://htmlpreview.github.io/?https://github.com/kgignatyev/digital-seattle/blob/main/donations-api/out/donations-svc-api-docs-1.0.0.html)
 
 This project defined APIs to be used by chat UI and other clients.
 
