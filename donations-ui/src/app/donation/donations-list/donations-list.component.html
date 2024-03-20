@@ -1,0 +1,28 @@
+<h3>Donations</h3>
+<dx-data-grid #svcsGrid
+              [dataSource]="donations"
+              keyExpr="id"
+              [rowAlternationEnabled]="true">
+
+  <dxo-toolbar>
+
+    <dxi-item>
+      <dx-button icon="refresh" (onClick)="refresh()"></dx-button>
+    </dxi-item>
+
+    <dxi-item name="exportButton"></dxi-item>
+    <dxi-item name="searchPanel"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="id"></dxi-column>
+  <dxi-column dataField="donorId"></dxi-column>
+  <dxi-column dataField="createdAt"></dxi-column>
+  <dxi-column dataField="commodities" cellTemplate="commoditiesCT"></dxi-column>
+
+  <div *dxTemplate="let cell of 'commoditiesCT'">
+    <app-commodities [commodities]="cell.data.commodities"></app-commodities>
+  </div>
+  <!--  <dxo-filter-row [visible]="true"></dxo-filter-row>-->
+  <dxo-search-panel [visible]="true"></dxo-search-panel>
+</dx-data-grid>
+

@@ -1,0 +1,31 @@
+<h3>Inventory</h3>
+<dx-data-grid #svcsGrid
+              [dataSource]="inventory"
+              keyExpr="name"
+              [rowAlternationEnabled]="true">
+
+  <dxo-toolbar>
+
+    <dxi-item>
+      <dx-button icon="plus" (onClick)="newDonation()"></dx-button>
+    </dxi-item>
+
+    <dxi-item>
+      <dx-button icon="refresh" (onClick)="refresh()"></dx-button>
+    </dxi-item>
+
+    <dxi-item name="exportButton"></dxi-item>
+    <dxi-item name="searchPanel"></dxi-item>
+  </dxo-toolbar>
+  <dxi-column dataField="name" [allowFiltering]="true"></dxi-column>
+  <dxi-column dataField="amount"></dxi-column>
+  <dxi-column dataField="amountKind"></dxi-column>
+  <dxi-column caption="..." cellTemplate="actionCT"></dxi-column>
+  <div *dxTemplate="let cell of 'actionCT'">
+    <a [routerLink]="['/distributions', cell.data.name,cell.data.amountKind ]">distribute</a>
+  </div>
+
+
+  <!--  <dxo-filter-row [visible]="true"></dxo-filter-row>-->
+  <dxo-search-panel [visible]="true"></dxo-search-panel>
+</dx-data-grid>

@@ -15,7 +15,7 @@ Build
 for the purpose of take home project documentation is committed to the repository.
 [out/donations-svc-api-docs-1.0.0.html](out%2Fdonations-svc-api-docs-1.0.0.html)
 
-This project defined APIs to be used by chat UI and other clients.
+This project defined APIs to be used by UI and other clients, for example acceptance tests.
 
 
 
