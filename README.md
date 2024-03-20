@@ -54,7 +54,7 @@ mvn  package
 
 ## Poking around
 
-On start some [test data is generated]() and stored, so the UI 
+On start some [test data is generated](main/donations-sboot-service/src/main/kotlin/com/kgignatyev/donations/service/services/TestDataSvc.kt) and stored, so the UI 
 can be used to look at the data. 
 ![UI](https://github.com/kgignatyev/digital-seattle/blob/main/donations-ui/docs/ui.png)
 
