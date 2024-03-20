@@ -56,7 +56,7 @@ mvn  package
 
 On start some [test data is generated]() and stored, so the UI 
 can be used to look at the data. 
-![UI](donation-ui/docs/ui.png)
+![UI](https://github.com/kgignatyev/digital-seattle/blob/main/donations-ui/docs/ui.png)
 
 
 
