@@ -1,0 +1,401 @@
+openapi: 3.0.1
+info:
+  title: Chat Service API
+  description: ""
+  contact:
+    name: Konstantin Ignatyev.
+    url: http://kgionline.com/
+    email: kgignatyev@gmail.com
+  license:
+    name: BSD 3-Clause License
+    url: https://opensource.org/licenses/BSD-3-Clause
+  version: 1.0.0
+servers:
+  - url: /api
+tags:
+  - name: DonationsServiceV1
+  - name: DonorsServiceV1
+  - name: ReportsServiceV1
+security:
+  - bearerAuth: [ ]
+
+paths:
+
+  /v1/reports/inventory:
+    get:
+      tags:
+        - ReportsServiceV1
+      summary: Get a list of donations by donors
+      operationId: inventoryReport
+      description: current inventory
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/v1.Commodity'
+
+  /v1/reports/donations-by-donors:
+    get:
+      tags:
+        - ReportsServiceV1
+      summary: Get a list of summary donations by donors
+      operationId: donatorsReport
+      description: summary of donations by donors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/v1.DonorContribution'
+
+
+  /v1/donors/action/search:
+    post:
+      tags:
+        - DonorsServiceV1
+      summary: Search donors
+      operationId: searchDonors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.SearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.DonorsList'
+
+  /v1/donors:
+    get:
+      tags:
+        - DonorsServiceV1
+      summary: Get a list of donors
+      operationId: listDonors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.DonorsList'
+    post:
+      tags:
+        - DonorsServiceV1
+      summary: Create a new donor
+      operationId: createDonor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.Donor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Donor'
+
+  /v1/donors/{id}:
+    get:
+      tags:
+        - DonorsServiceV1
+      summary: Get a donor by ID
+      operationId: getDonor
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Donor'
+    put:
+      tags:
+        - DonorsServiceV1
+      summary: Update a donor by ID
+      operationId: updateDonor
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.Donor'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Donor'
+
+
+  /v1/donations:
+    post:
+      tags:
+        - DonationsServiceV1
+      summary: Create a new donation
+      operationId: createDonation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.Donation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Donation'
+
+  /v1/distributions:
+      post:
+        tags:
+          - DistributionServiceV1
+        summary: Create a new distribution
+        operationId: createDistribution
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.Distribution'
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/v1.Status'
+
+  /v1/distributions/action/report:
+    post:
+      tags:
+        - DistributionServiceV1
+      summary: Get a list of distributions
+      operationId: reportDistributions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1.SearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.DistributionsList'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    id:
+      name: id
+      schema:
+        type: string
+      in: path
+      required: true
+  schemas:
+    v1.Status:
+      type: object
+      properties:
+        responseCode:
+          type: string
+        description:
+          type: string
+      required: [ responseCode ]
+
+    v1.YN:
+      type: string
+      enum:
+        - Y
+        - N
+
+    v1.ListSummary:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+          format: int64
+        size:
+          type: integer
+      required:
+        - total
+        - offset
+        - limit
+
+    v1.Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+        limit:
+          type: integer
+      required:
+        - offset
+        - limit
+
+    v1.SearchRequest:
+      type: object
+      properties:
+        textCriteria:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/v1.Pagination'
+      required:
+        - pagination
+
+    v1.Donor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          description: staff member ID who created the record
+          type: string
+      required:
+        - id
+        - name
+        - phone
+        - email
+
+
+    v1.DonorContribution:
+        type: object
+        properties:
+            donor:
+               $ref: '#/components/schemas/v1.Donor'
+            contributions:
+                type: array
+                items:
+                  $ref: '#/components/schemas/v1.Commodity'
+        required:
+            - donor
+            - contributions
+
+
+    v1.DonorsList:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/v1.Donor'
+          summary:
+            $ref: '#/components/schemas/v1.ListSummary'
+
+    v1.DistributionsList:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/v1.Distribution'
+          summary:
+            $ref: '#/components/schemas/v1.ListSummary'
+
+    v1.CommodityType:
+      type: string
+      enum:
+        - CASH
+        - CHECK
+        - GOODS
+        - FOOD
+
+    v1.Commodity:
+      type: object
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        amountKind:
+          type: string
+          description: 'currency for cash or check, or food type for FOOD, or name of goods'
+        commodityType:
+          $ref: '#/components/schemas/v1.CommodityType'
+
+      required:
+        - amount
+        - amountKind
+        - commodityType
+        - description
+
+    v1.Donation:
+      type: object
+      properties:
+        id:
+          type: string
+        donorId:
+          type: string
+          description: need to disambiguate donors with same names
+        commodity:
+          $ref: '#/components/schemas/v1.Commodity'
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          description: staff member ID who created the record
+          type: string
+
+      required:
+        - id
+        - donorId
+        - commodity
+
+    v1.Distribution:
+      type: object
+      properties:
+        id:
+          type: string
+        recipientId:
+          type: string
+          description: id of the recipient
+        commodity:
+          $ref: '#/components/schemas/v1.Commodity'
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          description: staff member ID who created the record
+          type: string
+
+      required:
+        - id
+        - recipientId
+        - commodity
